@@ -57,9 +57,9 @@ All dimensions scale with `GetDpiForWindow`, so high-DPI displays need no extra 
 
 | Method | File | Notes |
 |---|---|---|
-| **One-click import (recommended)** | [`unity-macos-chrome-0.1.0.unitypackage`](dist/unity-macos-chrome-0.1.0.unitypackage) | Double-click it, or use `Assets > Import Package > Custom Package...`, select all → Import. Installs to `Assets/LiquidGlass/`; an existing folder is updated in place |
-| Unzip and drop in | [`unity-macos-chrome-0.1.0.zip`](dist/unity-macos-chrome-0.1.0.zip) | Unzip to get `LiquidGlass/`, then drag the whole folder into your project's `Assets/` |
-| UPM tarball | [`com.liquidglass.macos-chrome-0.1.0.tgz`](dist/com.liquidglass.macos-chrome-0.1.0.tgz) | `Window > Package Manager > + > Add package from tarball...` |
+| **One-click import (recommended)** | [`unity-macos-chrome-0.2.0.unitypackage`](dist/unity-macos-chrome-0.2.0.unitypackage) | Double-click it, or use `Assets > Import Package > Custom Package...`, select all → Import. Installs to `Assets/LiquidGlass/`; an existing folder is updated in place |
+| Unzip and drop in | [`unity-macos-chrome-0.2.0.zip`](dist/unity-macos-chrome-0.2.0.zip) | Unzip to get `LiquidGlass/`, then drag the whole folder into your project's `Assets/` |
+| UPM tarball | [`com.liquidglass.macos-chrome-0.2.0.tgz`](dist/com.liquidglass.macos-chrome-0.2.0.tgz) | `Window > Package Manager > + > Add package from tarball...` |
 | Local package | `package.json` | `Add package from disk...`; or add `"com.liquidglass.macos-chrome": "file:../../unity-macos-chrome"` to `Packages/manifest.json` |
 | Git URL | Repository URL | `Package Manager > + > Add package from git URL...` |
 
@@ -112,7 +112,7 @@ In one sentence: **remove the native title bar, make the non-client area "ownerl
 4. The menu bar is a separate `WS_POPUP` topmost layered window, shown only while Unity is the foreground process; dropdowns are fully custom-drawn and the selected item is sent back to Unity via `PostMessage(WM_COMMAND, id)` — **no menu logic is reimplemented**;
 5. `WM_GETMINMAXINFO` shifts the maximize area down so a maximized window stops below the screen menu bar.
 
-About 7,600 lines of C# — see [How it works](docs/macos-chrome.md) for details.
+About 7,800 lines of C# — see [How it works](docs/macos-chrome.md) for details.
 
 ---
 

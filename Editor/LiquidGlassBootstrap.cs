@@ -18,16 +18,38 @@ namespace LiquidGlass.Editor
 
         static LiquidGlassBootstrap()
         {
+
+            GlassStabilityGuard.Reset("domain reload");
+
             EditorApplication.update += OnUpdate;
             EditorApplication.delayCall += AutoRestore;
         }
 
         static void AutoRestore()
         {
-            if (LiquidGlassSettings.instance.enabled)
+            if (!LiquidGlassSettings.instance.enabled) return;
+
+            if (!GlassStabilityGuard.IsRisky)
             {
                 Enable();
+                return;
             }
+
+            EditorApplication.update -= AutoRestoreWhenReady;
+            EditorApplication.update += AutoRestoreWhenReady;
+        }
+
+        static void AutoRestoreWhenReady()
+        {
+            if (!LiquidGlassSettings.instance.enabled)
+            {
+                EditorApplication.update -= AutoRestoreWhenReady;
+                return;
+            }
+            if (GlassStabilityGuard.IsRisky) return;
+
+            EditorApplication.update -= AutoRestoreWhenReady;
+            Enable();
         }
 
         static bool UserIsDragging()
@@ -40,6 +62,8 @@ namespace LiquidGlass.Editor
             PerfProbe.Frame();
 
             if (!LiquidGlassSettings.instance.enabled) return;
+
+            if (GlassStabilityGuard.IsRisky) return;
 
             if (!DesktopBackdrop.IsRunning) DesktopBackdrop.Start();
 

@@ -599,6 +599,8 @@ namespace LiquidGlass.Editor
         {
             if (s_Hwnd == IntPtr.Zero) return;
 
+            if (GlassStabilityGuard.StructureLocked) return;
+
             PerfProbe.Begin();
             TickCore();
             PerfProbe.End("menubar");

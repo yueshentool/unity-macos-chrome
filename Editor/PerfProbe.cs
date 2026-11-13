@@ -58,6 +58,7 @@ namespace LiquidGlass.Editor
 
             var sb = new StringBuilder("Perf/5s frames=");
             sb.Append(s_Frames);
+            sb.Append(" guard=").Append(GlassStabilityGuard.IsRisky ? GlassStabilityGuard.Reason : "ok");
             foreach (var kv in s_Slots)
             {
                 sb.Append(' ').Append(kv.Key).Append('=')

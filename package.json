@@ -1,7 +1,7 @@
 {
   "name": "com.liquidglass.macos-chrome",
   "displayName": "macOS Chrome for Unity Editor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "unity": "2021.3",
   "description": "Give the Unity Editor on Windows a macOS look: traffic-light title bar, rounded window, and a screen-top menu bar.",
   "keywords": [

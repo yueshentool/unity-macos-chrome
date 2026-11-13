@@ -266,7 +266,7 @@ namespace LiquidGlass.Editor
                 EditorApplication.delayCall -= DeferredInstall;
                 EditorApplication.delayCall += DeferredInstall;
 
-                s_NextInstallTry = EditorApplication.timeSinceStartup + 0.15;
+                s_NextInstallTry = EditorApplication.timeSinceStartup + 0.05;
                 EditorApplication.update -= OnUpdateInstall;
                 EditorApplication.update += OnUpdateInstall;
             }
@@ -280,6 +280,15 @@ namespace LiquidGlass.Editor
         {
             EditorApplication.delayCall -= DeferredInstall;
             if (!s_PendingInstall || Installed) return;
+
+            if (GlassStabilityGuard.StructureLocked)
+            {
+                s_NextInstallTry = EditorApplication.timeSinceStartup + 0.05;
+                s_PendingDeadline = EditorApplication.timeSinceStartup + 6.0;
+                EditorApplication.update -= OnUpdateInstall;
+                EditorApplication.update += OnUpdateInstall;
+                return;
+            }
 
             try { Install(); }
             catch (Exception e) { Log("DeferredInstall 异常：" + e.GetType().Name + " " + e.Message); }
@@ -298,6 +307,12 @@ namespace LiquidGlass.Editor
         static void OnUpdateInstall()
         {
             if (!s_PendingInstall) return;
+
+            if (GlassStabilityGuard.StructureLocked)
+            {
+                s_PendingDeadline = EditorApplication.timeSinceStartup + 5.0;
+                return;
+            }
 
             double now = EditorApplication.timeSinceStartup;
             if (now < s_NextInstallTry) return;
@@ -501,7 +516,8 @@ namespace LiquidGlass.Editor
                     FixClassStyle(view);
                 }
 
-                Log($"Install 成功 barH={s_BarHeight} dpi={s_DpiScale:0.##} frameY={s_FrameY} " +
+                Log($"Install 成功 +{GlassStabilityGuard.SinceDomainLoad:0.00}s " +
+                    $"barH={s_BarHeight} dpi={s_DpiScale:0.##} frameY={s_FrameY} " +
                     $"classBrush={(view != IntPtr.Zero ? "main+view" : "main-only")} " +
                     $"menu=0x{s_HMenu.ToInt64().ToString("X")} origStyle=0x{s_OrigStyle.ToString("X")}");
                 Debug.Log($"[Editor Chrome] macOS 标题栏已开启（高 {s_FrameY + s_BarHeight}px，DPI {s_DpiScale * 100:0}%）。");
@@ -630,6 +646,8 @@ namespace LiquidGlass.Editor
         {
 
             if (s_InSizeMove) return;
+
+            if (GlassStabilityGuard.StructureLocked) return;
 
             PerfProbe.Begin();
             ScanEditorWindows(false);
@@ -787,8 +805,11 @@ namespace LiquidGlass.Editor
             {
 
                 IntPtr curtainTarget = s_Hwnd != IntPtr.Zero ? s_Hwnd : UnityMainWindow.Handle;
-                Log($"幕布检查 installed={Installed} quitting={s_Quitting} target=0x{curtainTarget.ToInt64():X}");
-                if (!s_Quitting && Installed) FreezeCurtain.Show(curtainTarget);
+
+                bool ownsFrame = Installed || ReadPersistedOrigStyle() != 0;
+                Log($"幕布检查 installed={Installed} ownsFrame={ownsFrame} " +
+                    $"quitting={s_Quitting} target=0x{curtainTarget.ToInt64():X}");
+                if (!s_Quitting && ownsFrame) FreezeCurtain.Show(curtainTarget);
             }
             catch { }
 

@@ -22,6 +22,10 @@ namespace LiquidGlass.Editor
 
         static double s_LastCost;
 
+        static double s_Penalty;
+
+        static bool s_AffinityCleared;
+
         public static Texture2D Texture => s_Texture;
 
         public static bool IsRunning => s_Started;
@@ -49,24 +53,54 @@ namespace LiquidGlass.Editor
             s_Small = null;
             s_Temp = null;
             s_Pixels = null;
+            s_Penalty = 0;
+            s_AffinityCleared = false;
         }
 
         public static void Tick()
         {
             if (!s_Started) return;
 
+            if (GlassStabilityGuard.IsRisky) return;
+
             var settings = LiquidGlassSettings.instance;
             double wanted = 1.0 / Mathf.Clamp(settings.fps, 1, 60);
 
-            const double k_Budget = 0.05;
+            const double k_Budget = 0.03;
             double interval = Math.Max(wanted, s_LastCost / k_Budget);
+
+            if (s_Penalty > 0) interval = Math.Max(interval, s_Penalty);
 
             if (EditorApplication.timeSinceStartup < s_NextTime) return;
             s_NextTime = EditorApplication.timeSinceStartup + interval;
 
             double t0 = EditorApplication.timeSinceStartup;
-            CaptureOnce(settings);
+            bool failed = false;
+            try
+            {
+                CaptureOnce(settings);
+            }
+            catch (Exception e)
+            {
+                failed = true;
+                s_Penalty = Math.Min(10.0, Math.Max(2.0, s_Penalty * 2.0));
+                MacTitleBar.Log("Backdrop 抓屏异常：" + e.GetType().Name + " " + e.Message +
+                                "（退避 " + s_Penalty.ToString("0.0") + "s）");
+            }
             s_LastCost = EditorApplication.timeSinceStartup - t0;
+
+            if (failed) return;
+
+            if (s_LastCost > 0.2)
+            {
+                s_Penalty = Math.Min(10.0, Math.Max(2.0, s_LastCost * 10.0));
+                MacTitleBar.Log("Backdrop 单次耗时 " + (s_LastCost * 1000).ToString("0") +
+                                "ms，退避 " + s_Penalty.ToString("0.0") + "s");
+            }
+            else if (s_LastCost < 0.05 && s_Penalty > 0)
+            {
+                s_Penalty = 0;
+            }
         }
 
         public static void RefreshNow()
@@ -81,7 +115,11 @@ namespace LiquidGlass.Editor
             if (!UnityMainWindow.TryGetClientRectOnScreen(out int x, out int y, out int w, out int h))
                 return;
 
-            NativeMethods.SetWindowDisplayAffinity(UnityMainWindow.Handle, NativeMethods.WDA_NONE);
+            if (!s_AffinityCleared && UnityMainWindow.Handle != IntPtr.Zero)
+            {
+                NativeMethods.SetWindowDisplayAffinity(UnityMainWindow.Handle, NativeMethods.WDA_NONE);
+                s_AffinityCleared = true;
+            }
 
             if (!GdiScreenCapture.TryCapture(x, y, w, h, out s_Raw)) return;
 

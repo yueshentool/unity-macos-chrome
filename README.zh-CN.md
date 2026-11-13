@@ -57,9 +57,9 @@ Unity 在 Windows 上是标准的 Win32 窗口外观。这个项目把它替换�
 
 | 方式 | 文件 | 说明 |
 |---|---|---|
-| **一键导入（推荐）** | [`unity-macos-chrome-0.1.0.unitypackage`](dist/unity-macos-chrome-0.1.0.unitypackage) | 双击，或在编辑器里 `Assets > Import Package > Custom Package...` 选中它，全选 → Import。装到 `Assets/LiquidGlass/`，已有目录时是就地更新 |
-| 解压即用 | [`unity-macos-chrome-0.1.0.zip`](dist/unity-macos-chrome-0.1.0.zip) | 解压得到 `LiquidGlass/`，整个拖进项目的 `Assets/` 下 |
-| UPM tarball | [`com.liquidglass.macos-chrome-0.1.0.tgz`](dist/com.liquidglass.macos-chrome-0.1.0.tgz) | `Window > Package Manager > + > Add package from tarball...` |
+| **一键导入（推荐）** | [`unity-macos-chrome-0.2.0.unitypackage`](dist/unity-macos-chrome-0.2.0.unitypackage) | 双击，或在编辑器里 `Assets > Import Package > Custom Package...` 选中它，全选 → Import。装到 `Assets/LiquidGlass/`，已有目录时是就地更新 |
+| 解压即用 | [`unity-macos-chrome-0.2.0.zip`](dist/unity-macos-chrome-0.2.0.zip) | 解压得到 `LiquidGlass/`，整个拖进项目的 `Assets/` 下 |
+| UPM tarball | [`com.liquidglass.macos-chrome-0.2.0.tgz`](dist/com.liquidglass.macos-chrome-0.2.0.tgz) | `Window > Package Manager > + > Add package from tarball...` |
 | 本地包 | `package.json` | `Add package from disk...`；或在 `Packages/manifest.json` 加一行 `"com.liquidglass.macos-chrome": "file:../../unity-macos-chrome"` |
 | Git URL | 仓库地址 | `Package Manager > + > Add package from git URL...` |
 
@@ -112,7 +112,7 @@ Unity 在 Windows 上是标准的 Win32 窗口外观。这个项目把它替换�
 4. 菜单栏是独立的 `WS_POPUP` 置顶分层窗口，只在 Unity 是前台进程时显示；下拉菜单完全自绘，选中项通过 `PostMessage(WM_COMMAND, id)` 回传给 Unity，**菜单逻辑一行都不用重写**；
 5. `WM_GETMINMAXINFO` 把最大化区域往下挪，让最大化窗口停在屏幕菜单栏下方。
 
-约 7600 行 C#，细节见 [工作原理](docs/macos-chrome.zh-CN.md)。
+约 7800 行 C#，细节见 [工作原理](docs/macos-chrome.zh-CN.md)。
 
 ---
 
