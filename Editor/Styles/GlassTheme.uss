@@ -1,0 +1,64 @@
+/*
+ * Copyright (C) 2026 Liquid Glass contributors
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
+:root {
+
+    --lg-panel: rgba(16, 18, 26, 0.46);
+    --lg-panel-strong: rgba(12, 14, 20, 0.62);
+    --lg-panel-soft: rgba(255, 255, 255, 0.045);
+    --lg-border: rgba(255, 255, 255, 0.13);
+    --lg-border-soft: rgba(255, 255, 255, 0.07);
+
+    --unity-colors-window-background: var(--lg-panel);
+    --unity-colors-default-background: var(--lg-panel);
+    --unity-colors-app-background: rgba(8, 10, 14, 0.28);
+    --unity-colors-toolbar-background: var(--lg-panel-strong);
+    --unity-colors-toolbar-button-background: rgba(255, 255, 255, 0.05);
+    --unity-colors-toolbar-button-background-hover: rgba(255, 255, 255, 0.12);
+    --unity-colors-toolbar-button-background-checked: rgba(255, 255, 255, 0.16);
+    --unity-colors-tab-background: rgba(255, 255, 255, 0.03);
+    --unity-colors-tab-background-hover: rgba(255, 255, 255, 0.09);
+    --unity-colors-tab-background-selected: rgba(255, 255, 255, 0.12);
+    --unity-colors-box-background: var(--lg-panel-soft);
+    --unity-colors-field-background: rgba(255, 255, 255, 0.07);
+    --unity-colors-header-background: rgba(255, 255, 255, 0.04);
+    --unity-colors-border: var(--lg-border-soft);
+    --unity-colors-separator: var(--lg-border-soft);
+}
+
+Toolbar,
+.unity-toolbar {
+    background-color: rgba(18, 20, 28, 0.42);
+    border-color: var(--lg-border-soft);
+    border-bottom-width: 1px;
+}
+
+.unity-tab,
+Tab {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-color: transparent;
+}
+
+.unity-tab--active,
+Tab:checked {
+    background-color: rgba(255, 255, 255, 0.13);
+    border-color: var(--lg-border);
+    border-left-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+}
+
+.unity-splitter,
+.unity-dock-area-splitter {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.unity-scroller-vertical .unity-slider,
+.unity-scroller-horizontal .unity-slider {
+    background-color: rgba(255, 255, 255, 0.10);
+    border-radius: 4px;
+}

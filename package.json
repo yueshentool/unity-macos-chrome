@@ -1,0 +1,26 @@
+{
+  "name": "com.liquidglass.macos-chrome",
+  "displayName": "macOS Chrome for Unity Editor",
+  "version": "0.1.0",
+  "unity": "2021.3",
+  "description": "Give the Unity Editor on Windows a macOS look: traffic-light title bar, rounded window, and a screen-top menu bar.",
+  "keywords": [
+    "editor",
+    "editor-tools",
+    "macos",
+    "titlebar",
+    "menubar",
+    "win32",
+    "chrome",
+    "theme"
+  ],
+  "author": {
+    "name": "Your Name",
+    "url": "https://github.com/yourname"
+  },
+  "license": "GPL-3.0-only",
+  "documentationUrl": "https://github.com/yourname/unity-macos-chrome/blob/main/README.md",
+  "changelogUrl": "https://github.com/yourname/unity-macos-chrome/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/yourname/unity-macos-chrome/blob/main/LICENSE",
+  "dependencies": {}
+}
